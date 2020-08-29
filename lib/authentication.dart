@@ -10,7 +10,6 @@ abstract class BaseAuth {
   Future<bool> isEmailVerified();
   Future<void> changeEmail(String email);
   Future<void> changePassword(String password);
-  Future<void> deleteUser();
   Future<void> sendPasswordResetMail(String email);
 }
 
@@ -51,9 +50,9 @@ class Auth implements BaseAuth {
   Future<void> changeEmail(String email) async {
     FirebaseUser user = await _firebaseAuth.currentUser();
     user.updateEmail(email).then((_) {
-      print("Succesfull changed email");
+      print("Se a modificado Email");
     }).catchError((error) {
-      print("email can't be changed" + error.toString());
+      print("Email no se puede cambiar" + error.toString());
     });
     return null;
   }
@@ -62,20 +61,9 @@ class Auth implements BaseAuth {
   Future<void> changePassword(String password) async {
     FirebaseUser user = await _firebaseAuth.currentUser();
     user.updatePassword(password).then((_) {
-      print("Succesfull changed password");
+      print("Se a modificado Password");
     }).catchError((error) {
-      print("Password can't be changed" + error.toString());
-    });
-    return null;
-  }
-
-  @override
-  Future<void> deleteUser() async {
-    FirebaseUser user = await _firebaseAuth.currentUser();
-    user.delete().then((_) {
-      print("Succesfull user deleted");
-    }).catchError((error) {
-      print("user can't be delete" + error.toString());
+      print("Password no se puede cambiar" + error.toString());
     });
     return null;
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterandroid/authentication.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:async';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.auth, this.userId, this.onSignedOut})
@@ -10,13 +11,13 @@ class HomePage extends StatefulWidget {
   final VoidCallback onSignedOut;
   final String userId;
   @override
-  State<StatefulWidget> createState() => new _HomePageState();
+  State<StatefulWidget> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController _emailFilter = new TextEditingController();
-  final TextEditingController _passwordFilter = new TextEditingController();
+  final TextEditingController _emailFilter = TextEditingController();
+  final TextEditingController _passwordFilter = TextEditingController();
   String _email = "";
   String _password = "";
   String _resetPasswordEmail = "";
@@ -58,18 +59,18 @@ class _HomePageState extends State<HomePage> {
     _showVerifyEmailSentDialog();
   }
 
+//verifica si esta logeado o no el usuario
   void _showVerifyEmailSentDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
 // return object of type Dialog
         return AlertDialog(
-          title: new Text("Verify your account"),
-          content:
-              new Text("Link to verify account has been sent to your email"),
+          title: Text("Verifica tu acceso"),
+          content: Text("Se envio verificacion para validar Email"),
           actions: <Widget>[
-            new FlatButton(
-              child: new Text("Dismiss"),
+            FlatButton(
+              child: Text("Descartar"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -97,15 +98,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _showButtonList() {
-    return new Container(
+    return Container(
       padding: EdgeInsets.all(26.0),
-      child: new ListView(
+      child: ListView(
         children: <Widget>[
+          //cambio de Email
           _showChangeEmailContainer(),
-          new SizedBox(
+          SizedBox(
+            height: 20.0,
+          ),
+          //Card de Cambio de Passpord
+          _showChangePasswordContainer(),
+          SizedBox(
             height: 40.0,
           ),
-          _showChangePasswordContainer(),
+
+          ///lista elementos
         ],
       ),
     );
@@ -113,16 +121,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Flutter login demo'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Flutter login'),
         actions: <Widget>[
-          new FlatButton(
-              child: new Text('Logout',
-                  style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-              onPressed: _signOut)
+          FlatButton(
+              child: Text('Salir',
+                  style: TextStyle(fontSize: 17.0, color: Colors.white)),
+              onPressed: _signOut),
         ],
       ),
+
+      //lista de elemendos en la clase showButoonlst
       body: _showButtonList(),
     );
   }
@@ -130,26 +140,28 @@ class _HomePageState extends State<HomePage> {
   _showChangeEmailContainer() {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: new BorderRadius.circular(30.0),
-        color: Colors.amberAccent,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.amberAccent[200],
       ),
       padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
       child: Column(
         children: <Widget>[
-          new TextFormField(
+          TextFormField(
             controller: _emailFilter,
-            decoration: new InputDecoration(
+            decoration: InputDecoration(
               contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              hintText: "Enter New Email",
+              hintText: "Ingresa nuevo Email",
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(22.0)),
             ),
           ),
-          new MaterialButton(
+          SizedBox(
+            height: 10.0,
+          ),
+          MaterialButton(
             shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
+                borderRadius: BorderRadius.circular(30.0)),
             onPressed: () {
-// widget.auth.changeEmail("abc@gmail.com
               _changeEmail();
             },
             minWidth: MediaQuery.of(context).size.width,
@@ -157,7 +169,7 @@ class _HomePageState extends State<HomePage> {
             color: Colors.blueAccent,
             textColor: Colors.white,
             child: Text(
-              "Change Email",
+              "Cambiar Email",
               textAlign: TextAlign.center,
             ),
           ),
@@ -181,7 +193,7 @@ class _HomePageState extends State<HomePage> {
         });
       }
     } else {
-      print("email feild empty");
+      print("Error al Ingresar Email");
     }
   }
 
@@ -191,38 +203,41 @@ class _HomePageState extends State<HomePage> {
       print("============>" + _password);
       widget.auth.changePassword(_password);
     } else {
-      print("password feild empty");
+      print("Error al ingresar Password");
     }
   }
 
   _showChangePasswordContainer() {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30.0), color: Colors.brown),
+          borderRadius: BorderRadius.circular(30.0), color: Colors.brown[400]),
       padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
       child: Column(
         children: <Widget>[
-          new TextFormField(
+          TextFormField(
             controller: _passwordFilter,
-            decoration: new InputDecoration(
+            decoration: InputDecoration(
               contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              hintText: "Enter New Password",
+              hintText: "Nuevo Password",
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(22.0)),
             ),
           ),
-          new MaterialButton(
+          SizedBox(
+            height: 10.0,
+          ),
+          MaterialButton(
             shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
+                borderRadius: BorderRadius.circular(30.0)),
             onPressed: () {
               _changePassword();
             },
             minWidth: MediaQuery.of(context).size.width,
             padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-            color: Colors.blueAccent,
+            color: Colors.blueAccent[400],
             textColor: Colors.white,
             child: Text(
-              "Change Password",
+              "Cambiar  Password",
               textAlign: TextAlign.center,
             ),
           ),

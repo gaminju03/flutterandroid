@@ -6,13 +6,13 @@ class LoginSignUpPage extends StatefulWidget {
   final BaseAuth auth;
   final VoidCallback onSignedIn;
   @override
-  State<StatefulWidget> createState() => new _LoginSignUpPageState();
+  State<StatefulWidget> createState() => _LoginSignUpPageState();
 }
 
 enum FormMode { LOGIN, SIGNUP }
 
 class _LoginSignUpPageState extends State<LoginSignUpPage> {
-  final _formKey = new GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   String _email;
   String _password;
   String _errorMessage;
@@ -95,9 +95,9 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
   @override
   Widget build(BuildContext context) {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Flutter Firebase Autenticacion'),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Login'),
         ),
         body: Stack(
           children: <Widget>[
@@ -118,11 +118,11 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
   }
 
   Widget _showBody() {
-    return new Container(
+    return Container(
         padding: EdgeInsets.all(16.0),
-        child: new Form(
+        child: Form(
           key: _formKey,
-          child: new ListView(
+          child: ListView(
             shrinkWrap: true,
             children: <Widget>[
               _showEmailInput(),
@@ -137,13 +137,13 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
   Widget _showEmailInput() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
-      child: new TextFormField(
+      child: TextFormField(
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
-        decoration: new InputDecoration(
+        decoration: InputDecoration(
             hintText: 'Email',
-            icon: new Icon(
+            icon: Icon(
               Icons.mail,
               color: Colors.grey,
             )),
@@ -156,13 +156,13 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
   Widget _showPasswordInput() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: new TextFormField(
+      child: TextFormField(
         maxLines: 1,
         obscureText: true,
         autofocus: false,
-        decoration: new InputDecoration(
+        decoration: InputDecoration(
           hintText: 'Password',
-          icon: new Icon(
+          icon: Icon(
             Icons.lock,
             color: Colors.grey,
           ),
@@ -174,13 +174,12 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
   }
 
   Widget _showSecondaryButton() {
-    return new FlatButton(
+    return FlatButton(
       child: _formMode == FormMode.LOGIN
-          ? new Text('Create an account',
-              style: new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300))
-          : new Text('Have an account? Sign in',
-              style:
-                  new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),
+          ? Text('Crear un Usuario nuevo',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300))
+          : Text('Ingresar con tu cuenta ',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),
       onPressed: _formMode == FormMode.LOGIN
           ? _changeFormToSignUp
           : _changeFormToLogin,
@@ -188,20 +187,20 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
   }
 
   Widget _showPrimaryButton() {
-    return new Padding(
+    return Padding(
         padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
         child: SizedBox(
           height: 40.0,
-          child: new RaisedButton(
+          child: RaisedButton(
             elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0)),
             color: Colors.blue,
             child: _formMode == FormMode.LOGIN
-                ? new Text('Login',
-                    style: new TextStyle(fontSize: 20.0, color: Colors.white))
-                : new Text('Create account',
-                    style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+                ? Text('Login',
+                    style: TextStyle(fontSize: 20.0, color: Colors.white))
+                : Text('Crear Usuario',
+                    style: TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: _validateAndSubmit,
           ),
         ));
